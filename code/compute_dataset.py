@@ -252,6 +252,8 @@ if __name__ == "__main__":
         
         if row_id % 100 == 0:
             print(outputs[-1])
-
-    with open(f'{args.data_dir}/rag_emission_data/experiment_{args.llm}.pickle', 'wb') as handle:
+    output_path = f'{args.data_dir}/rag_emission_data/experiment_{args.llm}.pickle'
+    if not os.path.exists(output_path):
+        os.mkdir(f'{args.data_dir}/rag_emission_data/')
+    with open(f'{args.data_dir}/rag_emission_data/experiment_{args.llm}_{args.split}.pickle', 'wb') as handle:
         pickle.dump(outputs, handle, protocol=pickle.HIGHEST_PROTOCOL)
