@@ -105,6 +105,9 @@ models2name = {
                 'llama1b': "meta-llama/Llama-3.2-1B-Instruct",
                 'llama8b': "meta-llama/Llama-3.1-8B-Instruct", 
                'llama70b': "meta-llama/Llama-3.1-70B-Instruct",
+               'phi': "microsoft/Phi-3.5-mini-instruct",
+               'mixtral': "mistralai/Mixtral-8x7B-Instruct-v0.1",
+               'qwen32b':, "Qwen/Qwen2.5-32B-Instruct",
             } 
 
 if __name__ == "__main__":
@@ -200,12 +203,17 @@ if __name__ == "__main__":
         EMISSION_QUERY_PATH = os.path.join(EMISSION_OUTPUT_PATH, f'query_{query_id}')
         TRAIN_FLOPS_OUTPUT_PATH = os.path.join(EMISSION_QUERY_PATH, "train_flops.txt")
 
-        if not os.path.isdir(EMISSION_QUERY_PATH):
-            # Create model folder if it doesn't exist
-            if not os.path.isdir(EMISSION_OUTPUT_PATH):
-                os.mkdir(EMISSION_OUTPUT_PATH) 
-            # Create experiment folder
-            os.mkdir(EMISSION_QUERY_PATH)  
+        if os.path.isdir(EMISSION_QUERY_PATH):
+            print(f'Experiment folder {EMISSION_QUERY_PATH} already exists, skipping this query')
+            continue
+
+        # Create model folder if it doesn't exist
+        if not os.path.isdir(EMISSION_OUTPUT_PATH):
+            os.mkdir(EMISSION_OUTPUT_PATH)
+
+        # Create experiment folder
+        os.mkdir(EMISSION_QUERY_PATH)
+
 
         total_tracker = EmissionsTracker(
                 tracking_mode="process",
