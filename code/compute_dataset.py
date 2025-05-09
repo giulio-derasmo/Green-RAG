@@ -1,5 +1,8 @@
-import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+# import os
+# os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+
+
+
 
 import pandas as pd
 import numpy as np
@@ -80,7 +83,7 @@ def load_model_and_tokenizer(READER_MODEL_NAME, load_in_8bit=True, load_in_4bit=
     ## cache dir cosi teniamo tutto li!
     model = AutoModelForCausalLM.from_pretrained(READER_MODEL_NAME, 
                                                 quantization_config=quantization_config,
-                                                cache_dir='/home/filgiu/projects/cache_dir',
+                                                #cache_dir='/home/filgiu/projects/cache_dir',
                                                 device_map="auto")
     tokenizer = AutoTokenizer.from_pretrained(READER_MODEL_NAME)
 
@@ -179,9 +182,6 @@ if __name__ == "__main__":
 
     outputs = []
 
-    #################################### MODIFIED SOMETHING BY PIPPO #########################################################
-    #datas =  dataset.iloc[960:].reset_index(drop=True)
-    #####################################################################################################
 
     EMISSION_OUTPUT_PATH = f'{args.data_dir}/emission/{args.llm}/{args.split}'
     for row_id, sample in tqdm(dataset.iterrows(), desc='Processing samples', total=len(dataset)):
