@@ -18,4 +18,4 @@ conda activate fg
 
 
 # Run the evaluation script
-python3 /mnt/beegfs/home/fbetello/green_rag/Green-RAG/code/compute_dataset.py --llm llama1b --split test
+python3 /mnt/beegfs/home/fbetello/green_rag/Green-RAG/code/compute_dataset.py --llm llama1b --split test --load_in_8bit 0

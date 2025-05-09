@@ -105,9 +105,9 @@ models2name = {
                 'llama1b': "meta-llama/Llama-3.2-1B-Instruct",
                 'llama8b': "meta-llama/Llama-3.1-8B-Instruct", 
                'llama70b': "meta-llama/Llama-3.1-70B-Instruct",
-               'phi': "microsoft/Phi-3.5-mini-instruct",
+               'qwen05b': "Qwen/Qwen2.5-0.5B-Instruct",
                'mixtral': "mistralai/Mixtral-8x7B-Instruct-v0.1",
-               'qwen32b':, "Qwen/Qwen2.5-32B-Instruct",
+               'qwen32b': "Qwen/Qwen2.5-32B-Instruct",
             } 
 
 if __name__ == "__main__":
@@ -117,17 +117,18 @@ if __name__ == "__main__":
     parser.add_argument("--split", type=str, default=None)
     parser.add_argument("--retrieval_model", type=str, default="contriever")
     parser.add_argument("--llm", type=str, required=True)
-    #parser.add_argument("--load_in_8bit", type=int)  # any non-zero value will be treated as True
+    parser.add_argument("--version", type=str, default='0')
+    parser.add_argument("--load_in_8bit", type=int)  # any non-zero value will be treated as True
     #parser.add_argument("--load_in_4bit", type=int)  # any non-zero value will be treated as True
  
     args = parser.parse_args()
     ###################################
     #### FORCE LOAD IN 8bit ###
-    args.load_in_8bit = True
+    # args.load_in_8bit = True
     args.load_in_4bit = False
     
-    #if args.load_in_8bit: 
-    #    args.load_in_8bit = True
+    if args.load_in_8bit: 
+        args.load_in_8bit = True
     #if args.load_in_4bit:
     #    args.load_in_4bit = True
     ####################################
@@ -162,6 +163,7 @@ if __name__ == "__main__":
 
     # Load the Large Language Model (LLM) and tokenizer
     model_name = models2name[args.llm]
+    print(model_name)
     READER_LLM, tokenizer, model = load_model_and_tokenizer(READER_MODEL_NAME = model_name,
                                                             load_in_8bit=args.load_in_8bit, 
                                                             load_in_4bit=args.load_in_4bit)
@@ -252,8 +254,9 @@ if __name__ == "__main__":
         
         if row_id % 100 == 0:
             print(outputs[-1])
-    output_path = f'{args.data_dir}/rag_emission_data/experiment_{args.llm}.pickle'
-    if not os.path.exists(output_path):
-        os.mkdir(f'{args.data_dir}/rag_emission_data/')
-    with open(f'{args.data_dir}/rag_emission_data/experiment_{args.llm}_{args.split}.pickle', 'wb') as handle:
+        
+            
+    output_path = f'{args.data_dir}/rag_emission_data/experiment_{args.llm}_{args.split}.pickle'
+    os.makedirs(f'{args.data_dir}/rag_emission_data/', exist_ok=True)
+    with open(f'{args.data_dir}/rag_emission_data/experiment_{args.llm}_{args.split}_{args.version}.pickle', 'wb') as handle:
         pickle.dump(outputs, handle, protocol=pickle.HIGHEST_PROTOCOL)
